@@ -8,11 +8,26 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDataSource {
+    
+    // データ
+    var sampleData = ["dog", "cat", "bird"]
+    
+    // TableView
+    @IBOutlet var sampleTableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // データソースの設定
+        sampleTableView.dataSource = self
+        
+        // カスタムセルの登録
+        let nib = UINib(nibName: "SampleTableViewCell", bundle: Bundle.main)
+        sampleTableView.register(nib, forCellReuseIdentifier: "SampleCell")
+        
+        // 余分な横線の削除
+        sampleTableView.tableFooterView = UIView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -20,6 +35,15 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - TableViewDataSource
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sampleData.count
+    }
 
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SampleCell") as! SampleTableViewCell
+        cell.sampleLabel.text = sampleData[indexPath.row]
+        return cell
+    }
 }
 
